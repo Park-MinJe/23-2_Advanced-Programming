@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -8,16 +9,16 @@ class Calculator {
 private:
     int num1,
         num2;
-    char _operator;
+    string _operator;
 
 public:
     void setNum1(int pNum);
     void setNum2(int pNum);
-    void setOperator(char pOperator);
+    void setOperator(string pOperator);
 
     int getNum1();
     int getNum2();
-    int getOperator();
+    string getOperator();
     string getResult();
 };
 
@@ -27,7 +28,7 @@ void Calculator::setNum1(int pNum) {
 void Calculator::setNum2(int pNum) {
     num2 = pNum;
 }
-void Calculator::setOperator(char pOperator) {
+void Calculator::setOperator(string pOperator) {
     _operator = pOperator;
 }
 
@@ -37,20 +38,26 @@ int Calculator::getNum1() {
 int Calculator::getNum2() {
     return num2;
 }
-int Calculator::getOperator() {
+string Calculator::getOperator() {
     return _operator;
 }
 string Calculator::getResult() {
-    if (_operator == '+')
+    if (_operator == "+")
         return to_string(num1 + num2);
-    if (_operator == '-')
+    if (_operator == "-")
         return to_string(num1 - num2);
-    if (_operator == '*')
+    if (_operator == "*")
         return to_string(num1 * num2);
-    if (_operator == '/') {
+    if (_operator == "/") {
         if (num2 == 0) return "#DIV/0!";
         else return to_string(num1 / num2);
     }
+    if (_operator == "%") {
+        if (num2 == 0) return "#DIV/0!";
+        else return to_string(num1 % num2);
+    }
+
+    return "Error::Not Valid Operator";
 }
 
 int main()
@@ -61,23 +68,25 @@ int main()
 
     while (1) {
         cout << "수식을 입력하시오. 종료를 원하는 경우 'exit'을 입력하시오.: ";
-        cin >> lNum1 >> lOperator >> lNum2;
-        getchar();
+        getline(cin, input);
 
-        /*
-        if(input == "exit"){
+        if (input == "exit") {
+            cout << "종료합니다...\n";
             break;
-        }*/
+        }
 
-        //vector<string> inputSplit = split(input, ' ');
-        calc.setNum1(lNum1);
-        calc.setOperator(lOperator);
-        calc.setNum2(lNum2);
+        stringstream ss(input);
+        string s;
+        vector<string> inputSplit;
+        while (getline(ss, s, ' ')) {
+            inputSplit.push_back(s);
+        }
+        calc.setNum1(stoi(inputSplit[0]));
+        calc.setOperator(inputSplit[1]);
+        calc.setNum2(stoi(inputSplit[2]));
 
         cout << calc.getNum1() << " " << calc.getOperator() << " " << calc.getNum2() << " = " << calc.getResult() << "\n\n";
     }
 
     return 0;
 }
-
-

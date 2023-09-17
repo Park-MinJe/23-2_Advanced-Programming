@@ -1,2 +1,5 @@
-﻿  실습과제2.cpp
-  week2.vcxproj -> C:\Users\rprpr\source\repos\23-2_Advanced-Programming\week2\Debug\week2.exe
+﻿  실습과제3.cpp
+C:\Users\win11\source\repos\23-2_Advanced-Programming\week2\week2\실습과제3.cpp(66,16): warning C4101: 'lNum2' :참조되지 않은 지역 변수입니다.
+C:\Users\win11\source\repos\23-2_Advanced-Programming\week2\week2\실습과제3.cpp(66,23): warning C4101: 'lOperator' :참조되지 않은 지역 변수입니다.
+C:\Users\win11\source\repos\23-2_Advanced-Programming\week2\week2\실습과제3.cpp(66,9): warning C4101: 'lNum1' :참조되지 않은 지역 변수입니다.
+  week2.vcxproj -> C:\Users\win11\source\repos\23-2_Advanced-Programming\week2\Debug\week2.exe
