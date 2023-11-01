@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+
+class Rectangle {
+public:
+	int width,
+		height,
+		getArea();
+};
+
+int Rectangle::getArea() {
+	return width * height;
+}
+
+int main() {
+	Rectangle rect;
+	rect.width = 3;
+	rect.height = 5;
+	cout << "사각형의 면적은 " << rect.getArea() << endl;
+}
+
+/** 출력 결과
+* 사각형의 면적은 15
+*/
