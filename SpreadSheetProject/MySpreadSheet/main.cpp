@@ -1,10 +1,12 @@
-#include "Types.h"
+#ifndef __INCLUDE_TESTING_H__
+#define __INCLUDE_TESTING_H__
+#include "testing.h"
+#endif
 
 int main() {
-	
-	Types* pInterface = new Integer(10);
+	// Type down casting test
+	//_typeDownCasting();
 
-	cout << ((Integer*)pInterface)->getIntValue() << "\n";
-
-	delete pInterface;
+	// Work Page initializing test
+	//_workPageInitializing();
 }

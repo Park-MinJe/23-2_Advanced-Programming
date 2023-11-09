@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="SpreadSheetProgram.h" />
+    <ClInclude Include="testing.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="WorkPage.h" />
   </ItemGroup>

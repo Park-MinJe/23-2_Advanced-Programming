@@ -24,7 +24,7 @@ using namespace std;
 class Node {
 	int colIdx, rowIdx;
 public:
-	Node(int iCol = -1, int iRow = -1) : colIdx(iCol), rowIdx(iRow) { }
+	Node(int iRow = -1, int iCol = -1) : colIdx(iCol), rowIdx(iRow) { }
 
 	void setColIdx(int iCol) { colIdx = iCol; }
 	void setRowIdx(int iRow) { rowIdx = iRow; }
@@ -38,27 +38,31 @@ class Cell : public Node{
 	Types* type;
 	string value;
 public:
-	Cell(int iCol, int iRow)
-		: Node(iCol, iRow) {
-		type = new Types(TypeCode::TypeCode::NOTDEFINED);
-		value = "";
+	Cell(int iRow, int iCol, string sValue = "", TypeCode::TypeCode tc = TypeCode::TypeCode::NOTDEFINED)
+		: Node(iRow, iCol) {
+		type = new Types(tc);
+		value = sValue;
 	}
 	~Cell() {
 		delete type;
 	}
 
-	void setType(TypeCode::TypeCode type) {
-		(this->type)->setType(type);
+	void setType(TypeCode::TypeCode tc) {
+		type->setType(tc);
 	}
 	void setValue(string value) {
 		this->value = value;
 	}
 
-	const Types*& getType() {
+	const Types* getType() {
 		return type;
 	}
-	const string getValue() {
+	const string& getValue() {
 		return value;
+	}
+
+	const string toString() {
+		return type->getTypeName() + string("@") + value;
 	}
 };
 
