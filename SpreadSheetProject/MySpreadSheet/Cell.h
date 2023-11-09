@@ -35,9 +35,31 @@ public:
 };
 
 class Cell : public Node{
-	Types* typeWithValue;
+	Types* type;
+	string value;
 public:
-	Cell(int iCol, int iRow, TypeCode::TypeCode tc = TypeCode::NUMBER, double value);
+	Cell(int iCol, int iRow)
+		: Node(iCol, iRow) {
+		type = new Types(TypeCode::TypeCode::NOTDEFINED);
+		value = "";
+	}
+	~Cell() {
+		delete type;
+	}
+
+	void setType(TypeCode::TypeCode type) {
+		(this->type)->setType(type);
+	}
+	void setValue(string value) {
+		this->value = value;
+	}
+
+	const Types*& getType() {
+		return type;
+	}
+	const string getValue() {
+		return value;
+	}
 };
 
 #endif

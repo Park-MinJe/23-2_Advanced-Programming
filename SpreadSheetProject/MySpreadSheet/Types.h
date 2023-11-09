@@ -18,6 +18,8 @@ using namespace std;
 
 namespace TypeCode {
 	enum TypeCode {
+		NOTDEFINED,
+
 		NUMBER,
 		INTEGER,
 		DOUBLE,
@@ -30,6 +32,8 @@ namespace TypeCode {
 	};
 }
 string TypeNames[] = {
+	"NOTDEFINED",
+
 	"NUMBER",
 	"INTEGER",
 	"DOUBLE",
@@ -44,8 +48,20 @@ string TypeNames[] = {
 class Types {
 	TypeCode::TypeCode typeCode;
 	string typeName;
-protected:
+public:
 	Types(TypeCode::TypeCode eTypeCode) : typeCode(eTypeCode), typeName(TypeNames[eTypeCode]) { }
+
+	void setType(TypeCode::TypeCode eTypeCode) {
+		typeCode = eTypeCode;
+		typeName = TypeNames[eTypeCode];
+	}
+	
+	TypeCode::TypeCode getTypeCode() {
+		return typeCode;
+	}
+	string getTypeName() {
+		return typeName;
+	}
 };
 
 // Number
