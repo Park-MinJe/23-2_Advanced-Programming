@@ -1,2 +1,4 @@
 ﻿  main.cpp
+C:\Users\rprpr\source\repos\23-2_Advanced-Programming\SpreadSheetProject\MySpreadSheet\WorkBook.h(55): warning C4715: 'WorkBook::getWorkPageByIdx': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\rprpr\source\repos\23-2_Advanced-Programming\SpreadSheetProject\MySpreadSheet\WorkBook.h(79): warning C4172: 지역 변수 또는 임시: rt의 주소를 반환하고 있습니다.
   MySpreadSheet.vcxproj -> C:\Users\rprpr\source\repos\23-2_Advanced-Programming\SpreadSheetProject\Debug\MySpreadSheet.exe

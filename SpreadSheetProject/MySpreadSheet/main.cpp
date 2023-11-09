@@ -9,4 +9,7 @@ int main() {
 
 	// Work Page initializing test
 	//_workPageInitializing();
+
+	// Work Book initializing test
+	_workBookInitializing();
 }

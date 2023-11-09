@@ -11,6 +11,16 @@
 #include <string>
 #endif
 
+#ifndef __INCLUDE_TYPEINFO__
+#define __INCLUDE_TYPEINFO__
+#include <typeinfo>
+#endif
+
+#ifndef __INCLUDE_SSTREAM__
+#define __INCLUDE_SSTREAM__
+#include <sstream>
+#endif
+
 #ifndef __INCLUDE_TYPES_H__
 #define __INCLUDE_TYPES_H__
 #include "Types.h"
@@ -62,7 +72,10 @@ public:
 	}
 
 	const string toString() {
-		return type->getTypeName() + string("@") + value;
+		stringstream ss;
+		ss << hex << this;
+
+		return type->getTypeName() + string("@") + ss.str();
 	}
 };
 

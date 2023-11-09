@@ -26,6 +26,11 @@
 #include "WorkPage.h"
 #endif
 
+#ifndef __INCLUDE_WORKBOOK__
+#define __INCLUDE_WORKBOOK__
+#include "WorkBook.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -46,6 +51,32 @@ void _workPageInitializing() {
 	cout << p->getCellByIdx(3, 2)->toString();
 
 	delete p;
+}
+
+void _workBookInitializing() {
+	WorkBook* wb = new WorkBook();
+
+	int pageCnt = wb->getPageCnt();
+	cout << wb->getWorkPageByIdx(0)->toString() << endl;
+	const string* pageNames = wb->getPageNames();
+	cout << "-Page Names List\n";
+	for (int i = 0; i < wb->getPageCnt(); ++i) {
+		cout << pageNames[i] << "\n";
+	}
+	delete[] pageNames;
+	cout << "\n";
+
+	wb->creatNewPage("CreatedPage");
+	pageCnt = wb->getPageCnt();
+	cout << wb->getWorkPageByIdx(pageCnt - 1)->toString() << endl;
+	pageNames = wb->getPageNames();
+	cout << "-Page Names List\n";
+	for (int i = 0; i < wb->getPageCnt(); ++i) {
+		cout << pageNames[i] << "\n";
+	}
+	delete[] pageNames;
+
+	delete wb;
 }
 
 #endif

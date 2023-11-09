@@ -70,6 +70,13 @@ public:
 	Cell*& getCellByIdx(int row, int col) {
 		return cells.at(row).at(col);
 	}
+
+	const string toString() {
+		stringstream ss;
+		ss << hex << this;
+
+		return string("WORKPAGE@") + ss.str();
+	}
 };
 
 #endif
