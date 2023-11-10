@@ -113,8 +113,27 @@ void _fileReaderTest() {
 	FileSystem* fs = new FileReader();
 	fs->showMssFiles();
 
-	((FileReader*)fs)->readMssFile("test1.mss");
+	pair<string, vector<vector<string>>> table1 = ((FileReader*)fs)->readMssFile("test1.mss");
+	printTable(table1.first, table1.second);
 
+	pair<string, vector<vector<string>>> table2 = ((FileReader*)fs)->readMssFile("test2.mss");
+	printTable(table2.first, table2.second);
+
+	map<string, vector<vector<string>>> tabs;
+	tabs.insert(table1);
+	tabs.insert(table2);
+
+	SpreadSheetProgram* prog = new SpreadSheetProgram();
+	prog->createWorkBookByExistingTables(tabs, "CreatedFileByExistingTabs");
+
+	WorkBook*& wb = prog->getWorkBookByFileName("CreatedFileByExistingTabs");
+	wb->showWorkbookInfo();
+	cout << "\n";
+	for (int i = 0; i < wb->getPageCnt(); ++i) {
+		wb->getWorkPageByIdx(i)->showPage();
+	}
+
+	delete prog;
 	delete fs;
 }
 

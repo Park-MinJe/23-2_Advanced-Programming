@@ -93,4 +93,176 @@ void printTable(string tbName, vector<string>& contents) {
 	cout << table << "\n";
 }
 
+void printTable(string tbName, vector<vector<string>>& contents) {
+	int row = contents.size(),
+		col = contents.at(0).size(), 
+		maxLen = 0,
+		strLen = 0,
+		tabNameLen = tbName.length();
+
+	int* colLen = new int[col];
+	for (int i = 0; i < col; ++i) {
+		colLen[i] = 0;
+	}
+
+	// format을 위해 최대 가로 길이 판단
+	maxLen = tabNameLen;
+	for (int i = 0; i < row; ++i) {
+		strLen = 1;
+		for (int j = 0; j < col; ++j) {
+			int tmpLen = contents.at(i).at(j).length();
+			colLen[j] = colLen[j] < tmpLen ? tmpLen : colLen[j];
+			strLen += tmpLen + 3;
+		}
+		maxLen = maxLen < strLen ? strLen : maxLen;
+	}
+
+	string table = "";
+	// -----------------
+	for (int i = 0; i < maxLen + 4; i++) {
+		table += "-";
+	}
+	table += "\n";
+	cout << table;
+
+	// |   {tabName}   |
+	table = "|";
+	for (int i = 0; i < maxLen + 2 - tabNameLen + 1; ++i) {
+		if (i == (maxLen + 2 - tabNameLen + 1) / 2)
+			table += tbName;
+		else {
+			table += " ";
+		}
+	}
+	table += "|\n";
+	cout << table;
+
+	// |---------------|
+	table = "|";
+	for (int i = 0; i < maxLen + 2; ++i) {
+		table += "-";
+	}
+	table += "|\n";
+	cout << table;
+
+	// |    {constent}    |    {constent}    |
+	table = "";
+	for (int i = 0; i < row; ++i) {
+		table = "|";
+
+		for (int j = 0; j < col; ++j) {
+			string tmp = contents.at(i).at(j);
+			int tmpLen = tmp.length();
+			for (int k = 0; k < colLen[j] + 2 - tmpLen + 1; ++k) {
+				if (k == colLen[j] - tmpLen)
+					table += tmp;
+				else {
+					table += " ";
+				}
+			}
+
+			table += "|";
+		}
+		table += "\n";
+
+		cout << table;
+	}
+
+	// ------------------
+	table = "";
+	for (int i = 0; i < maxLen + 4; i++) {
+		table += "-";
+	}
+	table += "\n";
+
+	cout << table << "\n";
+
+	delete colLen;
+}
+
+void printTable(string tbName, vector<vector<Cell*>>& contents) {
+	int row = contents.size(),
+		col = contents.at(0).size(),
+		maxLen = 0,
+		strLen = 0,
+		tabNameLen = tbName.length();
+
+	int* colLen = new int[col];
+	for (int i = 0; i < col; ++i) {
+		colLen[i] = 0;
+	}
+
+	// format을 위해 최대 가로 길이 판단
+	maxLen = tabNameLen;
+	for (int i = 0; i < row; ++i) {
+		strLen = 1;
+		for (int j = 0; j < col; ++j) {
+			int tmpLen = contents.at(i).at(j)->getValue().length();
+			colLen[j] = colLen[j] < tmpLen ? tmpLen : colLen[j];
+			strLen += tmpLen + 3;
+		}
+		maxLen = maxLen < strLen ? strLen : maxLen;
+	}
+
+	string table = "";
+	// -----------------
+	for (int i = 0; i < maxLen + 4; i++) {
+		table += "-";
+	}
+	table += "\n";
+	cout << table;
+
+	// |   {tabName}   |
+	table = "|";
+	for (int i = 0; i < maxLen + 2 - tabNameLen + 1; ++i) {
+		if (i == (maxLen + 2 - tabNameLen + 1) / 2)
+			table += tbName;
+		else {
+			table += " ";
+		}
+	}
+	table += "|\n";
+	cout << table;
+
+	// |---------------|
+	table = "|";
+	for (int i = 0; i < maxLen + 2; ++i) {
+		table += "-";
+	}
+	table += "|\n";
+	cout << table;
+
+	// |    {constent}    |    {constent}    |
+	table = "";
+	for (int i = 0; i < row; ++i) {
+		table = "|";
+
+		for (int j = 0; j < col; ++j) {
+			string tmp = contents.at(i).at(j)->getValue();
+			int tmpLen = tmp.length();
+			for (int k = 0; k < colLen[j] + 2 - tmpLen + 1; ++k) {
+				if (k == colLen[j] - tmpLen)
+					table += tmp;
+				else {
+					table += " ";
+				}
+			}
+
+			table += "|";
+		}
+		table += "\n";
+
+		cout << table;
+	}
+
+	// ------------------
+	table = "";
+	for (int i = 0; i < maxLen + 4; i++) {
+		table += "-";
+	}
+	table += "\n";
+
+	cout << table << "\n";
+}
+
 #endif

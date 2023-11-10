@@ -16,6 +16,11 @@
 #include <windows.h>
 #endif
 
+#ifndef __INCLUDE_CSTDIO__
+#define __INCLUDE_CSTDIO__
+#include <cstdio>
+#endif
+
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
 #include "Logger.h"
@@ -31,6 +36,30 @@
 using namespace std;
 #endif
 
+#ifndef __INCLUDE_VECTOR__
+#define __INCLUDE_VECTOR__
+#include <vector>
+#endif
+
+#ifndef __INCLUDE_SSTREAM__
+#define __INCLUDE_SSTREAM__
+#include <sstream>
+#endif
+
+vector<string> split(string str, char Delimiter) {
+	istringstream iss(str);
+	string buffer;
+
+	vector<string> result;
+
+	// TODO: table의 한 항목이 ','를 포함하는 경우 예외처리
+	while (getline(iss, buffer, Delimiter)) {
+		result.push_back(buffer);
+	}
+
+	return result;
+}
+
 class FileReader : public FileSystem {
 	Logger* _log;
 
@@ -45,16 +74,23 @@ public:
 		delete _log;
 	}
 
-	void readMssFile(string fn) {
+	pair<string, vector<vector<string>>> readMssFile(string fn) {
+		vector<vector<string>> fileContent;
+
 		readFile.open(".\\resources\\" + fn);
 		if (readFile.is_open()) {
 			while (!readFile.eof()) {
 				string str;
 				getline(readFile, str);
 				_log->debug(str);
+
+				vector<string> lineOfFile = split(str, ',');
+				fileContent.push_back(lineOfFile);
 			}
 			readFile.close();
 		}
+
+		return make_pair(fn, fileContent);
 	}
 };
 

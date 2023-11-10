@@ -62,8 +62,17 @@ public:
 
 		files.insert(make_pair(fn, new WorkBook(fn)));
 	}
-	void createWorkBookByExistingFile() {
+	void createWorkBookByExistingTables(map<string, vector<vector<string>>> tabs, string fn = "NewFile") {
+		if (!files.empty()) {
+			int fnCnt = files.count(fn);
+			if (fnCnt > 0) {
+				string newFn = fn + "(" + to_string(fnCnt) + ")";
+				_log->warn("There is file named " + fn + ". System Changed new workbook name " + newFn);
+				fn = newFn;
+			}
+		}
 
+		files.insert(make_pair(fn, new WorkBook(tabs, fn)));
 	}
 
 	WorkBook*& getWorkBookByFileName(string fn) {

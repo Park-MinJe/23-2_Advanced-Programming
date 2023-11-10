@@ -53,6 +53,19 @@ public:
 
 		_log->info("New workbook named \"" + fn + "\" is generated");
 	}
+	WorkBook(map<string, vector<vector<string>>> tabs, string fn = "NewFile") : fileName(fn) {
+		_log = new Logger("WorkBook-" + fileName);
+
+		pageCnt = tabs.size();
+		map<string, vector<vector<string>>>::iterator tabsIter;
+		for (tabsIter = tabs.begin(); tabsIter != tabs.end(); tabsIter++) {
+			WorkPage* tmp = new WorkPage(*tabsIter);
+			pages.insert(make_pair(tmp->getPageName(), tmp));
+		}
+
+		_log->info("New workbook named \"" + fn + "\" is generated");
+	}
+
 	~WorkBook() {
 		for (iter = pages.begin(); iter != pages.end(); iter++) {
 			if(iter->second)
@@ -102,6 +115,9 @@ public:
 			}
 		}
 		pages.insert(make_pair(name, new WorkPage(name, iRowSize, iColSize)));
+	}
+	void createNewPageWithExistingPage(pair<string, vector<vector<string>>> tab) {
+
 	}
 
 	bool isEmpty() {
