@@ -31,6 +31,11 @@
 #include "PrintTable.h"
 #endif
 
+#ifndef __USING_STD__
+#define __USING_STD__
+using namespace std;
+#endif
+
 class WorkBook {
 	Logger* _log;
 
@@ -126,7 +131,7 @@ public:
 			rt.push_back(iter->second->toString());
 			++i;
 		}
-		printTable("Pages at " + fileName, rt);
+		printTable("Pages at " + this->toString(), rt);
 	}
 };
 

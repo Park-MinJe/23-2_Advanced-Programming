@@ -21,7 +21,11 @@ int main() {
 	//_workBookInitializing();
 
 	// Spread Sheet Program test
-	_spreadSheetProgram();
+	//_spreadSheetProgram();
+
+	// File System test
+	// File Reader Initializing test
+	_fileReaderTest();
 
 	delete _logTable;
 	delete _logTest;

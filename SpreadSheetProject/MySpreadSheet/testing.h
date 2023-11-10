@@ -41,6 +41,16 @@
 #include "Logger.h"
 #endif
 
+#ifndef __INCLUDE_FILESYSTEM__
+#define __INCLUDE_FILESYSTEM__
+#include "FileSystem.h"
+#endif
+
+#ifndef __INCLUDE_FILEREADER__
+#define __INCLUDE_FILEREADER__
+#include "FileReader.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -97,6 +107,15 @@ void _spreadSheetProgram() {
 	prog->showFilesInfo();
 
 	delete prog;
+}
+
+void _fileReaderTest() {
+	FileSystem* fs = new FileReader();
+	fs->showMssFiles();
+
+	((FileReader*)fs)->readMssFile("test1.mss");
+
+	delete fs;
 }
 
 #endif

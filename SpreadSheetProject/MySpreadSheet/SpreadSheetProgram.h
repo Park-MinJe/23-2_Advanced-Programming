@@ -26,6 +26,11 @@
 #include "Logger.h"
 #endif
 
+#ifndef __USING_STD__
+#define __USING_STD__
+using namespace std;
+#endif
+
 class SpreadSheetProgram {
 	Logger* _log;
 
@@ -57,6 +62,10 @@ public:
 
 		files.insert(make_pair(fn, new WorkBook(fn)));
 	}
+	void createWorkBookByExistingFile() {
+
+	}
+
 	WorkBook*& getWorkBookByFileName(string fn) {
 		if (!files.empty()) {
 			iter = files.find(fn);
