@@ -21,18 +21,28 @@
 #include "Cell.h"
 #endif
 
+#ifndef __INCLUDE_LOGGER__
+#define __INCLUDE_LOGGER__
+#include "Logger.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
 #endif
 
 class WorkPage {
+	Logger* _log;
+
 	string pageName;
 	int rowSize, colSize;
 	vector<vector<Cell*>> cells;
 public:
 	WorkPage(string name = "NewPage", int iRowSize = 100, int iColSize = 100)
 		: pageName(name), rowSize(iRowSize), colSize(iColSize) {
+		_log = new Logger("WorkPage-" + pageName);
+		_log->info("\"" + name + "\" is generated. Row size is " + to_string(iRowSize) + " and col size is " + to_string(iColSize));
+
 		cells.resize(iRowSize);
 		for (int i = 0; i < iRowSize; ++i) {
 			cells[i].resize(iColSize);
@@ -40,6 +50,18 @@ public:
 				cells[i][j] = new Cell(i, j);
 			}
 		}
+	}
+	~WorkPage() {
+		vector<vector<Cell*>>::iterator vectorCellIter;
+		vector<Cell*>::iterator cellPtrIter;
+		for (vectorCellIter = cells.begin(); vectorCellIter != cells.end(); vectorCellIter++) {
+			for (cellPtrIter = (*vectorCellIter).begin(); cellPtrIter != (*vectorCellIter).end(); cellPtrIter++) {
+				delete* cellPtrIter;
+			}
+		}
+
+		_log->debug("Work page " + pageName + " is deallocated");
+		delete _log;
 	}
 
 	void setPageName(string pn) {
@@ -75,7 +97,7 @@ public:
 		stringstream ss;
 		ss << hex << this;
 
-		return string("WORKPAGE@") + ss.str();
+		return string("WORKPAGE-" + pageName + "@") + ss.str();
 	}
 };
 

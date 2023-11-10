@@ -26,6 +26,11 @@
 #include "Types.h"
 #endif
 
+#ifndef __INCLUDE_LOGGER__
+#define __INCLUDE_LOGGER__
+#include "Logger.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -45,15 +50,20 @@ public:
 };
 
 class Cell : public Node{
+	Logger* _log;
+
 	Types* type;
 	string value;
 public:
 	Cell(int iRow, int iCol, string sValue = "", TypeCode::TypeCode tc = TypeCode::TypeCode::NOTDEFINED)
 		: Node(iRow, iCol) {
+		_log = new Logger("CELL[" + to_string(getrowIdx()) + "," + to_string(getColIdx()) + "]");
+
 		type = new Types(tc);
 		value = sValue;
 	}
 	~Cell() {
+		delete _log;
 		delete type;
 	}
 

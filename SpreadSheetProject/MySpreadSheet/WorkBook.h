@@ -11,9 +11,9 @@
 #include <string>
 #endif
 
-#ifndef __INCLUDE_VECTOR__
-#define __INCLUDE_VECTOR__
-#include <vector>
+#ifndef __INCLUDE_MAP__
+#define __INCLUDE_MAP__
+#include <map>
 #endif
 
 #ifndef __INCLUDE_WORKPAGE__
@@ -21,20 +21,42 @@
 #include "WorkPage.h"
 #endif
 
+#ifndef __INCLUDE_LOGGER__
+#define __INCLUDE_LOGGER__
+#include "Logger.h"
+#endif
+
+#ifndef __INCLUDE_PRINTTABLE__
+#define __INCLUDE_PRINTTABLE__
+#include "PrintTable.h"
+#endif
+
 class WorkBook {
+	Logger* _log;
+
 	string fileName;
 	int pageCnt;
-	vector<WorkPage*> pages;
+	map<string, WorkPage*> pages;
+	map<string, WorkPage*>::iterator iter;
 public:
 	WorkBook(string fn = "NewFile") : fileName(fn) {
+		_log = new Logger("WorkBook-" + fileName);
+
 		pageCnt = 1;
-		pages.reserve(pageCnt);
-		pages.push_back(new WorkPage());
+		WorkPage* tmp = new WorkPage();
+		pages.insert(make_pair(tmp->getPageName(), tmp));
+
+		_log->info("New workbook named \"" + fn + "\" is generated");
 	}
 	~WorkBook() {
-		for (int i = 0; i < pageCnt; ++i) {
-			delete pages.at(i);
+		for (iter = pages.begin(); iter != pages.end(); iter++) {
+			if(iter->second)
+				delete iter->second;
 		}
+
+		_log->debug("Workbook " + fileName + " is deallocated");
+		if (_log)
+			delete _log;
 	}
 
 	void setFileName(string fn) {
@@ -49,14 +71,32 @@ public:
 	}
 
 	WorkPage*& getWorkPageByIdx(int idx) {
-		if (!isEmpty())
-			return pages.at(idx);
+		if (!isEmpty()) {
+			iter = pages.begin();
+			advance(iter, idx);
+			return iter->second;
+		}
+		// TODO: return exception when workbook is empty
+	}
+	WorkPage*& getWorkPageByName(string name) {
+		if (!isEmpty()) {
+			iter = pages.find(name);
+			return iter->second;
+		}
 		// TODO: return exception when workbook is empty
 	}
 	void creatNewPage(string name = "NewPage", int iRowSize = 100, int iColSize = 100) {
 		pageCnt++;
-		pages.reserve(pageCnt);
-		pages.push_back(new WorkPage(name, iRowSize, iColSize));
+
+		if (!pages.empty()) {
+			int pageNameCnt = pages.count(name);
+			if (pageNameCnt > 0) {
+				string newPageName = name + "(" + to_string(pageNameCnt) + ")";
+				_log->warn("There is page named " + name + ". System Changed new page name " + newPageName);
+				name = newPageName;
+			}
+		}
+		pages.insert(make_pair(name, new WorkPage(name, iRowSize, iColSize)));
 	}
 
 	bool isEmpty() {
@@ -67,16 +107,26 @@ public:
 		stringstream ss;
 		ss << hex << this;
 
-		return string("WORKBOOK@") + ss.str();
+		return string("WORKBOOK-" + fileName + "@") + ss.str();
 	}
 
-	string*& getPageNames() {
-		string* rt = new string[pageCnt];
-		for (int i = 0; i < pageCnt; ++i) {
-			rt[i] = pages.at(i)->getPageName();
+	vector<string>& getPageNames() {
+		vector<string> rt;
+		for (iter = pages.begin(); iter != pages.end(); iter++) {
+			rt.push_back(iter->first);
 		}
 
 		return rt;
+	}
+
+	void showWorkbookInfo() {
+		vector<string> rt;
+		int i = 0;
+		for (iter = pages.begin(); iter != pages.end(); iter++) {
+			rt.push_back(iter->second->toString());
+			++i;
+		}
+		printTable("Pages at " + fileName, rt);
 	}
 };
 

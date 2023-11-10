@@ -3,6 +3,13 @@
 #include "testing.h"
 #endif
 
+#ifndef __INCLUDE_LOGGER__
+#define __INCLUDE_LOGGER__
+#include "Logger.h"
+#endif
+
+Logger* _logMain = new Logger("Main");
+
 int main() {
 	// Type down casting test
 	//_typeDownCasting();
@@ -11,5 +18,12 @@ int main() {
 	//_workPageInitializing();
 
 	// Work Book initializing test
-	_workBookInitializing();
+	//_workBookInitializing();
+
+	// Spread Sheet Program test
+	_spreadSheetProgram();
+
+	delete _logTable;
+	delete _logTest;
+	delete _logMain;
 }

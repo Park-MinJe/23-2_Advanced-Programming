@@ -143,6 +143,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="PrintTable.h" />
     <ClInclude Include="SpreadSheetProgram.h" />
     <ClInclude Include="testing.h" />
     <ClInclude Include="Types.h" />

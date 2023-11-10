@@ -31,10 +31,22 @@
 #include "WorkBook.h"
 #endif
 
+#ifndef __INCLUDE_SPREADSHEETPROG__
+#define __INCLUDE_SPREADSHEETPROG__
+#include "SpreadSheetProgram.h"
+#endif
+
+#ifndef __INCLUDE_LOGGER__
+#define __INCLUDE_LOGGER__
+#include "Logger.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
 #endif
+
+Logger* _logTest = new Logger("Testing");
 
 void _typeDownCasting() {
 	Types* pInterface = new Integer(10);
@@ -58,25 +70,33 @@ void _workBookInitializing() {
 
 	int pageCnt = wb->getPageCnt();
 	cout << wb->getWorkPageByIdx(0)->toString() << endl;
-	const string* pageNames = wb->getPageNames();
-	cout << "-Page Names List\n";
-	for (int i = 0; i < wb->getPageCnt(); ++i) {
-		cout << pageNames[i] << "\n";
-	}
-	delete[] pageNames;
+	wb->showWorkbookInfo();
 	cout << "\n";
 
 	wb->creatNewPage("CreatedPage");
 	pageCnt = wb->getPageCnt();
 	cout << wb->getWorkPageByIdx(pageCnt - 1)->toString() << endl;
-	pageNames = wb->getPageNames();
-	cout << "-Page Names List\n";
-	for (int i = 0; i < wb->getPageCnt(); ++i) {
-		cout << pageNames[i] << "\n";
-	}
-	delete[] pageNames;
+	wb->showWorkbookInfo();
 
 	delete wb;
+}
+
+void _spreadSheetProgram() {
+	SpreadSheetProgram* prog = new SpreadSheetProgram();
+	string workbookNames[2] = { "NewFile", "CreatedFile" };
+
+	prog->createWorkBook(workbookNames[0]);
+	WorkBook*& wb1 = prog->getWorkBookByFileName(workbookNames[0]);
+	//wb1->showWorkbookInfo();
+	prog->showFilesInfo();
+	cout << "\n";
+
+	prog->createWorkBook(workbookNames[1]);
+	WorkBook*& wb2 = prog->getWorkBookByFileName(workbookNames[1]);
+	//wb2->showWorkbookInfo();
+	prog->showFilesInfo();
+
+	delete prog;
 }
 
 #endif

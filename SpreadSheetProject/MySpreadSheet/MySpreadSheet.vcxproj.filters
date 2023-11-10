@@ -38,5 +38,11 @@
     <ClInclude Include="WorkBook.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
