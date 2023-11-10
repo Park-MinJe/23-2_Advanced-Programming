@@ -144,7 +144,9 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="SpreadSheetProgram.h" />
+    <ClInclude Include="testing.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="WorkBook.h" />
     <ClInclude Include="WorkPage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
