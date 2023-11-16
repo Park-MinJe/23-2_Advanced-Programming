@@ -11,6 +11,9 @@
 Logger* _logMain = new Logger("Main");
 
 int main() {
+	// Project dependency test
+	_ProjectDepencencyTest();
+
 	// Type down casting test
 	//_typeDownCasting();
 
@@ -25,7 +28,7 @@ int main() {
 
 	// File System test
 	// File Reader Initializing test
-	_fileReaderTest();
+	//_fileReaderTest();
 
 	delete _logTable;
 	delete _logTest;

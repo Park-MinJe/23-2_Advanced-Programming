@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.34031.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySpreadSheet", "MySpreadSheet\MySpreadSheet.vcxproj", "{E60B4DC3-A8EC-4E34-B653-1F44C5AED0B3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB} = {A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySpreadSheetHttpServer", "MySpreadSheetHttpServer\MySpreadSheetHttpServer.vcxproj", "{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,14 @@ Global
 		{E60B4DC3-A8EC-4E34-B653-1F44C5AED0B3}.Release|x64.Build.0 = Release|x64
 		{E60B4DC3-A8EC-4E34-B653-1F44C5AED0B3}.Release|x86.ActiveCfg = Release|Win32
 		{E60B4DC3-A8EC-4E34-B653-1F44C5AED0B3}.Release|x86.Build.0 = Release|Win32
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Debug|x64.ActiveCfg = Debug|x64
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Debug|x64.Build.0 = Debug|x64
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Debug|x86.ActiveCfg = Debug|Win32
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Debug|x86.Build.0 = Debug|Win32
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Release|x64.ActiveCfg = Release|x64
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Release|x64.Build.0 = Release|x64
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Release|x86.ActiveCfg = Release|Win32
+		{A899F2BC-C8ED-45C6-B9E9-F3A52F0054EB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

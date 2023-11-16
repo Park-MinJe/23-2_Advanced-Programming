@@ -51,6 +51,11 @@
 #include "FileReader.h"
 #endif
 
+#ifndef __INCLUDE_DEPENDENCYTEST__
+#define __INCLUDE_DEPENDENCYTEST__
+#include "../MySpreadSheetHttpServer/ProjectDependencyTest.h"
+#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -135,6 +140,11 @@ void _fileReaderTest() {
 
 	delete prog;
 	delete fs;
+}
+
+void _ProjectDepencencyTest() {
+	DependencyTest depTest;
+	depTest.printHello();
 }
 
 #endif
