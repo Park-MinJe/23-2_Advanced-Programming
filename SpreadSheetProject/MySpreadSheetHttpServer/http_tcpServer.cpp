@@ -92,12 +92,13 @@ namespace http {
 			log("===== Waiting for a new connection =====\n\n\n");
 			acceptConnection(m_new_socket);
 
-			char buffer[BUFFER_SIZE] = { 0 };
+			/*char buffer[BUFFER_SIZE] = {0};
 			bytesReceived = recv(m_new_socket, buffer, BUFFER_SIZE, 0);
 			log(buffer);
 			if (bytesReceived < 0) {
 				exitWithError("Failed to receive bytes from client socket connection");
-			}
+			}*/
+			http_handler(m_new_socket);
 
 			ostringstream ss;
 			ss << "------ Received Request from client ------\n\n";
@@ -183,23 +184,23 @@ namespace http {
 		char header[BUFFER_SIZE];
 		fill_header(header, 404, sizeof(NOT_FOUND_CONTENT), "text/html");
 
-		write(asock, header, strlen(header));
-		write(asock, NOT_FOUND_CONTENT, sizeof(NOT_FOUND_CONTENT));
+		_write(asock, header, strlen(header));
+		_write(asock, NOT_FOUND_CONTENT, sizeof(NOT_FOUND_CONTENT));
 	}
 
 	void TcpServer::handle_500(SOCKET asock) {
 		char header[BUFFER_SIZE];
 		fill_header(header, 500, sizeof(SERVER_ERROR_CONTENT), "text/html");
 
-		write(asock, header, strlen(header));
-		write(asock, SERVER_ERROR_CONTENT, sizeof(SERVER_ERROR_CONTENT));
+		_write(asock, header, strlen(header));
+		_write(asock, SERVER_ERROR_CONTENT, sizeof(SERVER_ERROR_CONTENT));
 	}
 
 	void TcpServer::http_handler(SOCKET asock) {
 		char header[BUFFER_SIZE];
 		char buf[BUFFER_SIZE];
 
-		if (read(asock, buf, BUFFER_SIZE) < 0) {
+		if (recv(asock, buf, BUFFER_SIZE, 0) < 0) {
 			perror("[ERR] Failed to read request.\n");
 			handle_500(asock); return;
 		}

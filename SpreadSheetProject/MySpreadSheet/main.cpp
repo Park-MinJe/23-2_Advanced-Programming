@@ -31,10 +31,10 @@ int main() {
 	//_fileReaderTest();
 
 	// HTTP server test
-	//_TcpServerIntegrationTest();
+	_TcpServerIntegrationTest();
 
 	// ThreadPool test
-	_ThreadPoolTest();
+	//_ThreadPoolTest();
 
 	delete _logTable;
 	delete _logTest;
