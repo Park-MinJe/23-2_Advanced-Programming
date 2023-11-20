@@ -12,7 +12,7 @@ Logger* _logMain = new Logger("Main");
 
 int main() {
 	// Project dependency test
-	_ProjectDepencencyTest();
+	//_ProjectDepencencyTest();
 
 	// Type down casting test
 	//_typeDownCasting();
@@ -29,6 +29,12 @@ int main() {
 	// File System test
 	// File Reader Initializing test
 	//_fileReaderTest();
+
+	// HTTP server test
+	//_TcpServerIntegrationTest();
+
+	// ThreadPool test
+	_ThreadPoolTest();
 
 	delete _logTable;
 	delete _logTest;

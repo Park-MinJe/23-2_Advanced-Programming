@@ -56,6 +56,20 @@
 #include "../MySpreadSheetHttpServer/ProjectDependencyTest.h"
 #endif
 
+#ifndef __INCLUDE_HTTPTCPSERVER__
+#define __INCLUDE_HTTPTCPSERVER__
+#include "../MySpreadSheetHttpServer/http_tcpServer.h"
+#include "../MySpreadSheetHttpServer/http_tcpServer.cpp"
+#endif
+
+#ifndef __INCLUDE_THREADPOOL__
+#define __INCLUDE_THREADPOOL__
+#include "../MySpreadSheetHttpServer/ThreadPool.h"
+#include "../MySpreadSheetHttpServer/ThreadPool.cpp"
+#endif
+
+#pragma comment(lib, "../x64/Debug/MySpreadSheetHttpServer.lib")
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -145,6 +159,31 @@ void _fileReaderTest() {
 void _ProjectDepencencyTest() {
 	DependencyTest depTest;
 	depTest.printHello();
+}
+
+void _TcpServerIntegrationTest() {
+	using namespace http;
+
+	TcpServer server = TcpServer("127.0.0.1", 8080);
+	server.startListen();
+}
+
+// ThreadPool usage example
+int work(int t, int id) {
+	_logTest->info(to_string(id) + " start\n");
+	this_thread::sleep_for(chrono::seconds(t));
+	_logTest->info(to_string(id) + " end after " + to_string(t) + "s\n");
+	return t + id;
+}
+void _ThreadPoolTest() {
+	ThreadPool::ThreadPool pool(3);
+	vector<future<int>> futures;
+	for (int i = 0; i < 10; i++) {
+		futures.emplace_back(pool.EnqueueJob(work, i % 3 + 1, i));
+	}
+	for (auto& f : futures) {
+		_logTest->info("result : " + to_string(f.get()) + " \n");
+	}
 }
 
 #endif

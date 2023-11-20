@@ -1,20 +1,30 @@
-#ifndef __INCLUDE_HTTPTCPSERVER__
-#define __INCLUDE_HTTPTCPSERVER__
-
-#ifndef __INCLUDE_STRING__
-#define __INCLUDE_STRING__
-#include <string>
-#endif
+#ifndef __HTTPTCPSERVER_H__
+#define __HTTPTCPSERVER_H__
 
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
 #endif
 
+#ifndef __INCLUDE_STDIO__
+#define __INCLUDE_STDIO__
 #include <stdio.h>
+#endif
+
+#ifndef __INCLUDE_WINSOCK__
+#define __INCLUDE_WINSOCK__
 #include <winsock.h>
+#endif
+
+#ifndef __INCLUDE_STDLIB__
+#define __INCLUDE_STDLIB__
 #include <stdlib.h>
+#endif
+
+#ifndef __INCLUDE_STRING__
+#define __INCLUDE_STRING__
 #include <string>
+#endif
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -41,6 +51,8 @@ namespace http {
 		void acceptConnection(SOCKET& new_socket);
 		string buildResponse();
 		void sendResponse();
+
+
 	};
 }
 

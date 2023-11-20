@@ -1,8 +1,19 @@
 #include "http_tcpServer.h"
 
+#ifndef __INCLUDE_IOSTREAM__
+#define __INCLUDE_IOSTREAM__
 #include <iostream>
+#endif
+
+#ifndef __INCLUDE_SSTREAM__
+#define __INCLUDE_SSTREAM__
 #include <sstream>
+#endif
+
+#ifndef __INCLUDE_IO__
+#define __INCLUDE_IO__
 #include <io.h>
+#endif
 
 namespace {
 	const int BUFFER_SIZE = 30720;
@@ -83,6 +94,7 @@ namespace http {
 
 			char buffer[BUFFER_SIZE] = { 0 };
 			bytesReceived = recv(m_new_socket, buffer, BUFFER_SIZE, 0);
+			log(buffer);
 			if (bytesReceived < 0) {
 				exitWithError("Failed to receive bytes from client socket connection");
 			}
