@@ -139,11 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="http_tcpServer_linux.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="ProjectDependencyTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="http_tcpServer_linux.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="win32HTTPServerEx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,9 +21,18 @@
     <ClInclude Include="precomp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="http_tcpServer_linux.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="win32HTTPServerEx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="http_tcpServer_linux.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
