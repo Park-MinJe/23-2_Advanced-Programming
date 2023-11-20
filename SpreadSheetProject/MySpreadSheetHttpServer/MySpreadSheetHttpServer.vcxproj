@@ -114,7 +114,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_WINSOCK_DEPRECATED_NO_WARNINGS; _CRT_SECURE_NO_WARNINGS;
+</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -139,12 +140,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="http_tcpServer_linux.h" />
+    <ClInclude Include="http_tcpServer.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="ProjectDependencyTest.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="http_tcpServer_linux.cpp" />
+    <ClCompile Include="http_tcpServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="win32HTTPServerEx.cpp" />
   </ItemGroup>

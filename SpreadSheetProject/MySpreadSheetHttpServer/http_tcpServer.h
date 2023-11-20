@@ -16,11 +16,14 @@ using namespace std;
 #include <stdlib.h>
 #include <string>
 
+#pragma comment(lib,"ws2_32.lib")
+
 namespace http {
 	class TcpServer {
 	public:
 		TcpServer(string ip_address, int port);
 		~TcpServer();
+		void startListen();
 	
 	private:
 		string m_ip_address;
@@ -35,6 +38,9 @@ namespace http {
 
 		int startServer();
 		void closeServer();
+		void acceptConnection(SOCKET& new_socket);
+		string buildResponse();
+		void sendResponse();
 	};
 }
 
