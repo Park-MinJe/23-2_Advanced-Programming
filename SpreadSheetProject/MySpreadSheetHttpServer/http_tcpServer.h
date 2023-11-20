@@ -26,6 +26,18 @@ using namespace std;
 #include <string>
 #endif
 
+#ifndef HEADER_FMT
+#define HEADER_FMT "HTTP/1.1 %d %s\nContent-Length: %ld\nContent-Type: %s\n\n"
+#endif
+
+#ifndef NOT_FOUND_CONTENT
+#define NOT_FOUND_CONTENT "<h1>404 Not Found</h1>\n"
+#endif
+
+#ifndef SERVER_ERROR_CONTENT
+#define SERVER_ERROR_CONTENT "<h1>500 Internal Server Error</h1>\n"
+#endif
+
 #pragma comment(lib,"ws2_32.lib")
 
 namespace http {
@@ -52,7 +64,12 @@ namespace http {
 		string buildResponse();
 		void sendResponse();
 
-
+		// HTTP
+		void fill_header(char* header, int status, long len, const char* type);
+		void find_mime(char* ct_type, char* uri);
+		void handle_404(SOCKET asock);
+		void handle_500(SOCKET asock);
+		void http_handler(SOCKET asock);
 	};
 }
 

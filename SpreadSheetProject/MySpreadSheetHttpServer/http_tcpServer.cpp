@@ -145,4 +145,101 @@ namespace http {
 			log("Error sending response to client.");
 		}
 	}
+
+	// HTTP
+	void TcpServer::fill_header(char* header, int status, long len, const char* type) {
+		char status_text[40];
+		switch (status) {
+		case 200:
+			strcpy(status_text, "OK");
+			break;
+		case 404:
+			strcpy(status_text, "Not Found");
+			break;
+		case 500:
+		default:
+			strcpy(status_text, "Internal Server Error");
+			break;
+		}
+		sprintf(header, HEADER_FMT, status, status_text, len, type);
+	}
+
+	void TcpServer::find_mime(char* ct_type, char* uri) {
+		char* ext = strrchr(uri, '.');
+		if (!strcmp(ext, ".html"))
+			strcpy(ct_type, "text/html");
+		else if (!strcmp(ext, ".jpg") || !strcmp(ext, ".jpeg"))
+			strcpy(ct_type, "image/jpeg");
+		else if (!strcmp(ext, ".png"))
+			strcpy(ct_type, "image/png");
+		else if (!strcmp(ext, ".css"))
+			strcpy(ct_type, "text/css");
+		else if (!strcmp(ext, ".js"))
+			strcpy(ct_type, "text/javascript");
+		else strcpy(ct_type, "text/plain");
+	}
+
+	void TcpServer::handle_404(SOCKET asock) {
+		char header[BUFFER_SIZE];
+		fill_header(header, 404, sizeof(NOT_FOUND_CONTENT), "text/html");
+
+		write(asock, header, strlen(header));
+		write(asock, NOT_FOUND_CONTENT, sizeof(NOT_FOUND_CONTENT));
+	}
+
+	void TcpServer::handle_500(SOCKET asock) {
+		char header[BUFFER_SIZE];
+		fill_header(header, 500, sizeof(SERVER_ERROR_CONTENT), "text/html");
+
+		write(asock, header, strlen(header));
+		write(asock, SERVER_ERROR_CONTENT, sizeof(SERVER_ERROR_CONTENT));
+	}
+
+	void TcpServer::http_handler(SOCKET asock) {
+		char header[BUFFER_SIZE];
+		char buf[BUFFER_SIZE];
+
+		if (read(asock, buf, BUFFER_SIZE) < 0) {
+			perror("[ERR] Failed to read request.\n");
+			handle_500(asock); return;
+		}
+
+		char* method = strtok(buf, " ");
+		char* uri = strtok(NULL, " ");
+		if (method == NULL || uri == NULL) {
+			perror("[ERR] Failed to identify method, URI.\n");
+			handle_500(asock); return;
+		}
+
+		printf("[INFO] Handling Request: method=%s, URI=%s\n", method, uri);
+
+		/*char safe_uri[BUFFER_SIZE];
+		char* local_uri;
+		struct stat st;
+
+		strcpy(safe_uri, uri);
+		if (!strcmp(safe_uri, "/")) strcpy(safe_uri, "/index.html");
+
+		local_uri = safe_uri + 1;
+		if (stat(local_uri, &st) < 0) {
+			perror("[WARN] No file found matching URI.\n");
+			handle_404(asock); return;
+		}
+
+		int fd = open(local_uri, O_RDONLY);
+		if (fd < 0) {
+			perror("[ERR] Failed to open file.\n");
+			handle_500(asock); return;
+		}
+
+		int ct_len = st.st_size;
+		char ct_type[40];
+		find_mime(ct_type, local_uri);
+		fill_header(header, 200, ct_len, ct_type);
+		write(asock, header, strlen(header));
+
+		int cnt;
+		while ((cnt = read(fd, buf, BUFFER_SIZE)) > 0)
+			write(asock, buf, cnt);*/
+	}
 }
