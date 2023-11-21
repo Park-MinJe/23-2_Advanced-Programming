@@ -1,11 +1,6 @@
 #ifndef __HTTPTCPSERVER_H__
 #define __HTTPTCPSERVER_H__
 
-#ifndef __USING_STD__
-#define __USING_STD__
-using namespace std;
-#endif
-
 #ifndef __INCLUDE_STDIO__
 #define __INCLUDE_STDIO__
 #include <stdio.h>
@@ -24,6 +19,17 @@ using namespace std;
 #ifndef __INCLUDE_STRING__
 #define __INCLUDE_STRING__
 #include <string>
+#endif
+
+#ifndef __INCLUDE_THREADPOOL__
+#define __INCLUDE_THREADPOOL__
+#include "ThreadPool.h"
+#include "ThreadPool.cpp"
+#endif
+
+#ifndef __USING_STD__
+#define __USING_STD__
+using namespace std;
 #endif
 
 #ifndef HEADER_FMT

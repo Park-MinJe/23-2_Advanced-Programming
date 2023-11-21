@@ -15,6 +15,11 @@
 #include <io.h>
 #endif
 
+#ifndef __INCLUDE_FORMAT__
+#define __INCLUDE_FORMAT__
+#include <format>
+#endif
+
 namespace {
 	const int BUFFER_SIZE = 30720;
 
@@ -62,7 +67,7 @@ namespace http {
 			return 1;
 		}
 
-		if (bind(m_socket, (sockaddr*)&m_socketAddress, m_socketAddress_len) < 0) {
+		if (::bind(m_socket, (sockaddr*)&m_socketAddress, m_socketAddress_len) < 0) {
 			exitWithError("Cannot connect socket to address");
 			return 1;
 		}
@@ -88,6 +93,9 @@ namespace http {
 
 		int bytesReceived;
 
+		ThreadPool::ThreadPool tPool(10);
+		vector<future<void>> futureResults;
+
 		while (true) {
 			log("===== Waiting for a new connection =====\n\n\n");
 			acceptConnection(m_new_socket);
@@ -98,15 +106,20 @@ namespace http {
 			if (bytesReceived < 0) {
 				exitWithError("Failed to receive bytes from client socket connection");
 			}*/
-			http_handler(m_new_socket);
 
-			ostringstream ss;
-			ss << "------ Received Request from client ------\n\n";
-			log(ss.str());
+			futureResults.emplace_back(tPool.EnqueueJob([this](SOCKET& new_socket) {
+				http_handler(new_socket);
 
-			sendResponse();
+				ostringstream ss;
+				ss << "------ Received Request from client ------\n\n";
+				log(ss.str());
 
-			closesocket(m_new_socket);
+				sendResponse();
+
+				closesocket(new_socket);
+				}, m_new_socket));
+			
+
 		}
 	}
 
@@ -149,7 +162,7 @@ namespace http {
 
 	// HTTP
 	void TcpServer::fill_header(char* header, int status, long len, const char* type) {
-		char status_text[40];
+		char status_text[40] = { 0 };
 		switch (status) {
 		case 200:
 			strcpy(status_text, "OK");
@@ -181,7 +194,7 @@ namespace http {
 	}
 
 	void TcpServer::handle_404(SOCKET asock) {
-		char header[BUFFER_SIZE];
+		char header[BUFFER_SIZE] = { 0 };
 		fill_header(header, 404, sizeof(NOT_FOUND_CONTENT), "text/html");
 
 		_write(asock, header, strlen(header));
@@ -189,7 +202,7 @@ namespace http {
 	}
 
 	void TcpServer::handle_500(SOCKET asock) {
-		char header[BUFFER_SIZE];
+		char header[BUFFER_SIZE] = { 0 };
 		fill_header(header, 500, sizeof(SERVER_ERROR_CONTENT), "text/html");
 
 		_write(asock, header, strlen(header));
@@ -197,13 +210,14 @@ namespace http {
 	}
 
 	void TcpServer::http_handler(SOCKET asock) {
-		char header[BUFFER_SIZE];
-		char buf[BUFFER_SIZE];
+		char header[BUFFER_SIZE] = { 0 };
+		char buf[BUFFER_SIZE] = { 0 };
 
 		if (recv(asock, buf, BUFFER_SIZE, 0) < 0) {
 			perror("[ERR] Failed to read request.\n");
 			handle_500(asock); return;
 		}
+		log(buf);
 
 		char* method = strtok(buf, " ");
 		char* uri = strtok(NULL, " ");
@@ -211,7 +225,7 @@ namespace http {
 			perror("[ERR] Failed to identify method, URI.\n");
 			handle_500(asock); return;
 		}
-
+		
 		printf("[INFO] Handling Request: method=%s, URI=%s\n", method, uri);
 
 		/*char safe_uri[BUFFER_SIZE];
