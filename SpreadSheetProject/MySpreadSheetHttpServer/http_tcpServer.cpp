@@ -39,7 +39,9 @@ namespace http {
 		: m_ip_address(ip_address), m_port(port), m_socket(), m_new_socket(),
 		m_incomingMessage(), m_socketAddress(),
 		m_socketAddress_len(sizeof(m_socketAddress)),
-		m_serverMessage(buildResponse()), m_wsaData() {
+		m_serverMessage(buildResponse()), m_wsaData()
+		//m_serverMessage(), m_wsaData()
+	{
 		
 		m_socketAddress.sin_family = AF_INET;
 		m_socketAddress.sin_port = htons(m_port);
@@ -219,14 +221,55 @@ namespace http {
 		}
 		log(buf);
 
-		char* method = strtok(buf, " ");
-		char* uri = strtok(NULL, " ");
+		char* method = strtok(buf, " \n=:,");
+		char* uri = strtok(NULL, " \n=:,");
 		if (method == NULL || uri == NULL) {
 			perror("[ERR] Failed to identify method, URI.\n");
 			handle_500(asock); return;
 		}
 		
 		printf("[INFO] Handling Request: method=%s, URI=%s\n", method, uri);
+
+		char* nextToken;
+		char boundary[BUFFER_SIZE];
+		char boundaryEnd[BUFFER_SIZE];
+		char salt[3] = "--";
+		vector<string> query;
+		for (nextToken = strtok(NULL, " \n=:,"); nextToken != NULL; nextToken = strtok(NULL, " \n=:,")) {
+			printf("%s\n", nextToken);
+
+			// get boundary id
+			if (!strcmp(nextToken, "boundary")) {
+				nextToken = strtok(NULL, " \n=:,");
+				strcpy(boundary, nextToken);
+				
+				int boundaryLen = 0;
+				for (int i = 0; boundary[i]; i++) {
+					boundaryLen++;
+				}
+				boundary[boundaryLen - 1] = '\0';
+
+				strcpy(boundaryEnd, boundary);
+				strcat(boundaryEnd, salt);
+			}
+			else if (!strcmp(nextToken, boundary)) {
+				nextToken = strtok(buf, " \n=:,");
+				if (!strcmp(nextToken, "\"query\"")) {
+					for (nextToken = strtok(NULL, " \n=:,"); strcmp(nextToken, "SELECT"); nextToken = strtok(NULL, " \n=:,")) {
+						if (!strcmp(nextToken, boundaryEnd))
+							break;
+					}
+
+					for (; strcmp(nextToken, boundaryEnd); nextToken = strtok(NULL, " \n=:,")) {
+						query.push_back(nextToken);
+					}
+				}
+			}
+		}
+
+		for (string q : query) {
+			cout << q << "\n";
+		}
 
 		/*char safe_uri[BUFFER_SIZE];
 		char* local_uri;
@@ -251,7 +294,7 @@ namespace http {
 		char ct_type[40];
 		find_mime(ct_type, local_uri);
 		fill_header(header, 200, ct_len, ct_type);
-		write(asock, header, strlen(header));
+		_write(asock, header, strlen(header));
 
 		int cnt;
 		while ((cnt = read(fd, buf, BUFFER_SIZE)) > 0)
