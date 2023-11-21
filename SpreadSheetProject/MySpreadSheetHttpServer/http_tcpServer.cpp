@@ -265,7 +265,7 @@ namespace http {
 		vector<string> query;
 		for (nextToken = strtok(NULL, " \n=:,"); nextToken != NULL; nextToken = strtok(NULL, " \n=:,")) {
 			removeCarriageReturn(nextToken);
-			printf("%s\n", nextToken);
+			//printf("%s\n", nextToken);
 
 			// get boundary id
 			if (!strcmp(nextToken, "boundary")) {
@@ -317,9 +317,9 @@ namespace http {
 			}
 		}
 
-		for (string q : query) {
+		/*for (string q : query) {
 			cout << q << "\n";
-		}
+		}*/
 
 		/*char safe_uri[BUFFER_SIZE];
 		char* local_uri;

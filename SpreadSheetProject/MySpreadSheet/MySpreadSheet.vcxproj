@@ -152,6 +152,7 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="FileReaderService.h" />
     <ClInclude Include="PrintTable.h" />
     <ClInclude Include="SpreadSheetProgram.h" />
     <ClInclude Include="SpreadSheetService.h" />

@@ -53,5 +53,8 @@
     <ClInclude Include="SpreadSheetService.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="FileReaderService.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
