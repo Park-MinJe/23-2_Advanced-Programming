@@ -5,8 +5,11 @@
 
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
-#include "Logger.h"
+#include "../MyLogger/Logger.h"
+#include "../MyLogger/Logger.cpp"
 #endif
+
+#pragma comment(lib, "../x64/Debug/MyLogger.lib")
 
 Logger* _logMain = new Logger("Main");
 

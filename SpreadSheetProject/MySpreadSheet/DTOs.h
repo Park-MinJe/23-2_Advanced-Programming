@@ -18,7 +18,8 @@
 
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
-#include "Logger.h"
+#include "../MyLogger/Logger.h"
+#include "../MyLogger/Logger.cpp"
 #endif
 
 class TabFileDTO {
