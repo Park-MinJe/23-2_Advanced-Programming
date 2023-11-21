@@ -3,7 +3,7 @@
 #include "ThreadPool.h"
 #endif
 
-namespace ThreadPool {
+namespace Thread {
 	ThreadPool::ThreadPool(size_t num_threads)
 		: num_threads_(num_threads), stop_all(false)
 	{
@@ -21,7 +21,7 @@ namespace ThreadPool {
 		}
 	}
 
-	template <class F, class... Args>
+	/*template <class F, class... Args>
 	future<typename result_of<F(Args...)>::type> ThreadPool::EnqueueJob(F&& f, Args&&... args) {
 		if (stop_all) {
 			throw runtime_error("ThreadPool is all stopped");
@@ -38,7 +38,7 @@ namespace ThreadPool {
 		cv_job_q_.notify_one();
 
 		return job_result_future;
-	}
+	}*/
 
 	void ThreadPool::WorkerThread() {
 		while (true) {
@@ -55,4 +55,4 @@ namespace ThreadPool {
 			job();
 		}
 	}
-}
+};

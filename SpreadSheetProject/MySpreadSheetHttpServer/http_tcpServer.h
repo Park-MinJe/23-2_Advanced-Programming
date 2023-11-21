@@ -21,12 +21,6 @@
 #include <string>
 #endif
 
-#ifndef __INCLUDE_THREADPOOL__
-#define __INCLUDE_THREADPOOL__
-#include "ThreadPool.h"
-#include "ThreadPool.cpp"
-#endif
-
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;

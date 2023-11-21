@@ -1,6 +1,6 @@
-#ifndef __INCLUDE_TESTING_H__
-#define __INCLUDE_TESTING_H__
-#include "testing.h"
+#ifndef __INCLUDE_SPREADSHEETTEST_H__
+#define __INCLUDE_SPREADSHEETTEST_H__
+#include "SpreadSheetTest.h"
 #endif
 
 #ifndef __INCLUDE_LOGGER__
@@ -11,9 +11,6 @@
 Logger* _logMain = new Logger("Main");
 
 int main() {
-	// Project dependency test
-	//_ProjectDepencencyTest();
-
 	// Type down casting test
 	//_typeDownCasting();
 
@@ -28,13 +25,7 @@ int main() {
 
 	// File System test
 	// File Reader Initializing test
-	//_fileReaderTest();
-
-	// HTTP server test
-	_TcpServerIntegrationTest();
-
-	// ThreadPool test
-	//_ThreadPoolTest();
+	_fileReaderTest();
 
 	delete _logTable;
 	delete _logTest;

@@ -1,4 +1,7 @@
+#ifndef __INCLUDE_HTTP_TCPSERVER__
+#define __INCLUDE_HTTP_TCPSERVER__
 #include "http_tcpServer.h"
+#endif
 
 #ifndef __INCLUDE_IOSTREAM__
 #define __INCLUDE_IOSTREAM__
@@ -19,6 +22,31 @@
 #define __INCLUDE_FORMAT__
 #include <format>
 #endif
+
+#ifndef __INCLUDE_THREADPOOL__
+#define __INCLUDE_THREADPOOL__
+#include "ThreadPool.h"
+#endif
+
+void removeCarriageReturn(char* token) {
+	if(token == nullptr) {
+		return;
+	}
+
+	char* read_ptr = token;
+	char* write_ptr = token;
+
+	while (*read_ptr) {
+		if (*read_ptr != '\r') {
+			*write_ptr = *read_ptr;
+			++write_ptr;
+		}
+
+		++read_ptr;
+	}
+
+	*write_ptr = '\0';
+}
 
 namespace {
 	const int BUFFER_SIZE = 30720;
@@ -95,7 +123,7 @@ namespace http {
 
 		int bytesReceived;
 
-		ThreadPool::ThreadPool tPool(10);
+		Thread::ThreadPool tPool(10);
 		vector<future<void>> futureResults;
 
 		while (true) {
@@ -236,32 +264,54 @@ namespace http {
 		char salt[3] = "--";
 		vector<string> query;
 		for (nextToken = strtok(NULL, " \n=:,"); nextToken != NULL; nextToken = strtok(NULL, " \n=:,")) {
+			removeCarriageReturn(nextToken);
 			printf("%s\n", nextToken);
 
 			// get boundary id
 			if (!strcmp(nextToken, "boundary")) {
 				nextToken = strtok(NULL, " \n=:,");
-				strcpy(boundary, nextToken);
-				
-				int boundaryLen = 0;
-				for (int i = 0; boundary[i]; i++) {
-					boundaryLen++;
-				}
-				boundary[boundaryLen - 1] = '\0';
+				removeCarriageReturn(nextToken);
 
+				strcpy(boundary, salt);
+				strcat(boundary, nextToken);
+				
 				strcpy(boundaryEnd, boundary);
 				strcat(boundaryEnd, salt);
 			}
 			else if (!strcmp(nextToken, boundary)) {
-				nextToken = strtok(buf, " \n=:,");
-				if (!strcmp(nextToken, "\"query\"")) {
-					for (nextToken = strtok(NULL, " \n=:,"); strcmp(nextToken, "SELECT"); nextToken = strtok(NULL, " \n=:,")) {
-						if (!strcmp(nextToken, boundaryEnd))
-							break;
+				
+				bool endOfBoundary = false;
+				nextToken = strtok(NULL, " \n=:,");
+				removeCarriageReturn(nextToken);
+				while (strcmp(nextToken, "\"query\"")) {
+					if (!strcmp(nextToken, "\"query\""))
+						break;
+
+					if (!strcmp(nextToken, boundaryEnd)) {
+						endOfBoundary = true;
+						break;
 					}
 
-					for (; strcmp(nextToken, boundaryEnd); nextToken = strtok(NULL, " \n=:,")) {
+					nextToken = strtok(NULL, " \n=:,");
+					removeCarriageReturn(nextToken);
+				}
+
+				if (!endOfBoundary) {
+					nextToken = strtok(NULL, " \n=:,");
+					removeCarriageReturn(nextToken);
+					while (strcmp(nextToken, "SELECT")) {
+						if (!strcmp(nextToken, boundaryEnd))
+							break;
+
+						nextToken = strtok(NULL, " \n=:,");
+						removeCarriageReturn(nextToken);
+					}
+
+					while (strcmp(nextToken, boundaryEnd)) {
 						query.push_back(nextToken);
+
+						nextToken = strtok(NULL, " \n=:,");
+						removeCarriageReturn(nextToken);
 					}
 				}
 			}
