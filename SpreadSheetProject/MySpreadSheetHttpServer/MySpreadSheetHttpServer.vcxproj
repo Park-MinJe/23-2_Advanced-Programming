@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="http_tcpServer.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="ProjectDependencyTest.h" />

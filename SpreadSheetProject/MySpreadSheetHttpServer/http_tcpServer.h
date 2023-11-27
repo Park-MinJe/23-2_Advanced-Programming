@@ -21,11 +21,10 @@
 #include <string>
 #endif
 
-//#ifndef __INCLUDE_LOGGER__
-//#define __INCLUDE_LOGGER__
-//#include "../MyLogger/Logger.h"
-//#include "../MyLogger/Logger.cpp"
-//#endif
+#ifndef __INCLUDE_CONTROLLER__
+#define __INCLUDE_CONTROLLER__
+#include "Controller.h"
+#endif
 
 #ifndef __USING_STD__
 #define __USING_STD__
@@ -54,8 +53,6 @@ namespace http {
 		void startListen();
 	
 	private:
-		//Logger* _log;
-
 		string m_ip_address;
 		int m_port;
 		SOCKET m_socket;
@@ -70,6 +67,7 @@ namespace http {
 		void closeServer();
 		void acceptConnection(SOCKET& new_socket);
 		string buildResponse();
+		string buildResponse(string content);
 		void sendResponse();
 
 		// HTTP
@@ -78,6 +76,9 @@ namespace http {
 		void handle_404(SOCKET asock);
 		void handle_500(SOCKET asock);
 		void http_handler(SOCKET asock);
+
+		// Controller
+
 	};
 }
 

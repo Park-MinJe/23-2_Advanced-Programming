@@ -14,8 +14,9 @@
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
 #include "../MyLogger/Logger.h"
-#include "../MyLogger/Logger.cpp"
 #endif
+
+#pragma comment(lib, "../x64/Debug/MyLogger.lib")
 
 #ifndef __INCLUDE_FILEREADER__
 #define __INCLUDE_FILEREADER__
@@ -27,42 +28,44 @@
 using namespace std;
 #endif
 
-class FileReaderService {
-	Logger* _log;
-	FileReader* fr;
+namespace {
+	class FileReaderService {
+		Logger* _log;
+		FileReader* fr;
 
-public:
-	FileReaderService();
-	~FileReaderService();
+	public:
+		FileReaderService();
+		~FileReaderService();
 
-	void ShowMssFilesService();
-	map<string, vector<vector<string>>> GetTabsByFileNameFromRootResourceDirService(vector<string> pFns);
-};
+		void ShowMssFilesService();
+		map<string, vector<vector<string>>> GetTabsByFileNameFromRootResourceDirService(vector<string> pFns);
+	};
 
-FileReaderService::FileReaderService() {
-	_log = new Logger("FileSystemService");
-	_log->info("FileSystemService is allocated");
+	FileReaderService::FileReaderService() {
+		_log = new Logger("FileSystemService");
+		_log->info("FileSystemService is allocated");
 
-	fr = new FileReader();
-}
-FileReaderService::~FileReaderService() {
-	_log->info("FileSystemService is deallocated");
-	delete _log;
+		fr = new FileReader();
+	}
+	FileReaderService::~FileReaderService() {
+		_log->info("FileSystemService is deallocated");
+		delete _log;
 
-	delete fr;
-}
-
-void FileReaderService::ShowMssFilesService() {
-	fr->showMssFiles();
-}
-
-map<string, vector<vector<string>>> FileReaderService::GetTabsByFileNameFromRootResourceDirService(vector<string> pFns) {
-	map<string, vector<vector<string>>> rt;
-	for (string fn : pFns) {
-		rt.insert(fr->readMssFile(fn));
+		delete fr;
 	}
 
-	return rt;
+	void FileReaderService::ShowMssFilesService() {
+		fr->showMssFiles();
+	}
+
+	map<string, vector<vector<string>>> FileReaderService::GetTabsByFileNameFromRootResourceDirService(vector<string> pFns) {
+		map<string, vector<vector<string>>> rt;
+		for (string fn : pFns) {
+			rt.insert(fr->readMssFile(fn));
+		}
+
+		return rt;
+	}
 }
 
 #endif

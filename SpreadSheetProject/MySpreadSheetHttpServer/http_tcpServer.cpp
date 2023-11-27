@@ -18,11 +18,6 @@
 #include <io.h>
 #endif
 
-#ifndef __INCLUDE_FORMAT__
-#define __INCLUDE_FORMAT__
-#include <format>
-#endif
-
 #ifndef __INCLUDE_THREADPOOL__
 #define __INCLUDE_THREADPOOL__
 #include "ThreadPool.h"
@@ -166,6 +161,14 @@ namespace http {
 
 	string TcpServer::buildResponse() {
 		string htmlFile = "<!DOCTYPE html><html lang=\"en\"><body><h1> HOME </h1><p> Hello from your Server :) </p></body></html>";
+		ostringstream ss;
+		ss << "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: " << htmlFile.size() << "\n\n" << htmlFile;
+
+		return ss.str();
+	}
+
+	string TcpServer::buildResponse(string content) {
+		string htmlFile = "<!DOCTYPE html><html lang=\"en\">" + content + "</body></html>";
 		ostringstream ss;
 		ss << "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: " << htmlFile.size() << "\n\n" << htmlFile;
 
@@ -326,15 +329,10 @@ namespace http {
 		 * Varify requested PATH
 		 */
 		vector<string> path;
-		int path_idx = 0;
 		for (nextToken = strtok(uri, "/\\"); nextToken != NULL; nextToken = strtok(NULL, "/\\")) {
 			log(string(nextToken));
 			path.push_back(string(nextToken));
 		}
-
-		/*for (string q : query) {
-			cout << q << "\n";
-		}*/
 
 		/*char safe_uri[BUFFER_SIZE];
 		char* local_uri;

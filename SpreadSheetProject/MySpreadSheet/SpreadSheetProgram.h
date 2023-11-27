@@ -24,8 +24,9 @@
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
 #include "../MyLogger/Logger.h"
-#include "../MyLogger/Logger.cpp"
 #endif
+
+#pragma comment(lib, "../x64/Debug/MyLogger.lib")
 
 #ifndef __USING_STD__
 #define __USING_STD__

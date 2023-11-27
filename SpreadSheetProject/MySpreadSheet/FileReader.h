@@ -21,11 +21,6 @@
 #include <cstdio>
 #endif
 
-#ifndef __INCLUDE_LOGGER__
-#define __INCLUDE_LOGGER__
-#include "Logger.h"
-#endif
-
 #ifndef __INCLUDE_FILESYSTEM__
 #define __INCLUDE_FILESYSTEM__
 #include "FileSystem.h"

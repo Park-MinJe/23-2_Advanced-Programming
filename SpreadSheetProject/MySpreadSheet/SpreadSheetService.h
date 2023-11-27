@@ -19,8 +19,9 @@
 #ifndef __INCLUDE_LOGGER__
 #define __INCLUDE_LOGGER__
 #include "../MyLogger/Logger.h"
-#include "../MyLogger/Logger.cpp"
 #endif
+
+#pragma comment(lib, "../x64/Debug/MyLogger.lib")
 
 #ifndef __INCLUDE_SPREADSHEETPROG__
 #define __INCLUDE_SPREADSHEETPROG__
@@ -32,42 +33,46 @@
 using namespace std;
 #endif
 
-class SpreadSheetService {
-	Logger* _log;
+namespace {
+	class SpreadSheetService {
+		Logger* _log;
 
-	SpreadSheetProgram* prog;
-public:
-	SpreadSheetService();
-	~SpreadSheetService();
+		SpreadSheetProgram* prog;
+	public:
+		SpreadSheetService();
+		~SpreadSheetService();
 
-	void CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn = "NewFile");
-	void ShowWorkBookInfoService(string pFn);
-};
 
-SpreadSheetService::SpreadSheetService() {
-	_log = new Logger("SpreadSheetService");
-	_log->info("SpreadSheetService is allocated");
 
-	prog = new SpreadSheetProgram();
-}
+		void CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn = "NewFile");
+		void ShowWorkBookInfoService(string pFn);
+	};
 
-SpreadSheetService::~SpreadSheetService() {
-	_log->info("SpreadSheetService is deallocated");
-	delete _log;
+	SpreadSheetService::SpreadSheetService() {
+		_log = new Logger("SpreadSheetService");
+		_log->info("SpreadSheetService is allocated");
 
-	delete prog;
-}
+		prog = new SpreadSheetProgram();
+	}
 
-void SpreadSheetService::CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn) {
-	prog->createWorkBookByExistingTables(pTabs, pFn);
-}
+	SpreadSheetService::~SpreadSheetService() {
+		_log->info("SpreadSheetService is deallocated");
+		delete _log;
 
-void SpreadSheetService::ShowWorkBookInfoService(string pFn) {
-	WorkBook*& wb = prog->getWorkBookByFileName(pFn);
-	wb->showWorkbookInfo();
-	cout << "\n";
-	for (int i = 0; i < wb->getPageCnt(); ++i) {
-		wb->getWorkPageByIdx(i)->showPage();
+		delete prog;
+	}
+
+	void SpreadSheetService::CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn) {
+		prog->createWorkBookByExistingTables(pTabs, pFn);
+	}
+
+	void SpreadSheetService::ShowWorkBookInfoService(string pFn) {
+		WorkBook*& wb = prog->getWorkBookByFileName(pFn);
+		wb->showWorkbookInfo();
+		cout << "\n";
+		for (int i = 0; i < wb->getPageCnt(); ++i) {
+			wb->getWorkPageByIdx(i)->showPage();
+		}
 	}
 }
 
