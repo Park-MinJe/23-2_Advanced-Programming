@@ -38,6 +38,7 @@ namespace {
 		~FileReaderService();
 
 		void ShowMssFilesService();
+		vector<string> GetMssFilesService();
 		map<string, vector<vector<string>>> GetTabsByFileNameFromRootResourceDirService(vector<string> pFns);
 	};
 
@@ -56,6 +57,9 @@ namespace {
 
 	void FileReaderService::ShowMssFilesService() {
 		fr->showMssFiles();
+	}
+	vector<string> FileReaderService::GetMssFilesService() {
+		return fr->getMssFiles();
 	}
 
 	map<string, vector<vector<string>>> FileReaderService::GetTabsByFileNameFromRootResourceDirService(vector<string> pFns) {

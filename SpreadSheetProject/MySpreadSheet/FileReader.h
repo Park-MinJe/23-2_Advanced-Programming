@@ -41,18 +41,20 @@ using namespace std;
 #include <sstream>
 #endif
 
-vector<string> split(string str, char Delimiter) {
-	istringstream iss(str);
-	string buffer;
+namespace {
+	vector<string> split(string str, char Delimiter) {
+		istringstream iss(str);
+		string buffer;
 
-	vector<string> result;
+		vector<string> result;
 
-	// TODO: table의 한 항목이 ','를 포함하는 경우 예외처리
-	while (getline(iss, buffer, Delimiter)) {
-		result.push_back(buffer);
+		// TODO: table의 한 항목이 ','를 포함하는 경우 예외처리
+		while (getline(iss, buffer, Delimiter)) {
+			result.push_back(buffer);
+		}
+
+		return result;
 	}
-
-	return result;
 }
 
 class FileReader : public FileSystem {

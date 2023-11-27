@@ -32,17 +32,19 @@
 using namespace std;
 #endif
 
-const string TCHARToString(const TCHAR* ptsz) {
-	int len = wcslen((wchar_t*)ptsz);
+namespace {
+	const string TCHARToString(const TCHAR* ptsz) {
+		int len = wcslen((wchar_t*)ptsz);
 
-	int lenForChar = 2 * len + 1;
-	size_t size = 0;
-	char* psz = new char[lenForChar];
-	wcstombs_s(&size, psz, len+1, (wchar_t*)ptsz, lenForChar);
-	string s = psz;
+		int lenForChar = 2 * len + 1;
+		size_t size = 0;
+		char* psz = new char[lenForChar];
+		wcstombs_s(&size, psz, len + 1, (wchar_t*)ptsz, lenForChar);
+		string s = psz;
 
-	delete[] psz;
-	return s;
+		delete[] psz;
+		return s;
+	}
 }
 
 class FileSystem {
@@ -69,7 +71,7 @@ public:
 
 		HANDLE hFile = FindFirstFile(fileFormat, &c_file);
 		CString foundFileName;
-		_log->debug("*.mss Files at " + TCHARToString(currentPath));
+		_log->debug("*.mss Files at " + TCHARToString(currentPath) + "\\resources\\");
 		if (hFile != INVALID_HANDLE_VALUE) {
 			do {
 				foundFileName.Format(_T("%s"), c_file.cFileName);
@@ -77,6 +79,28 @@ public:
 			} while (FindNextFile(hFile, &c_file));
 		}
 		FindClose(hFile);
+	}
+
+	vector<string> getMssFiles() {
+		vector<string> rt;
+
+		WIN32_FIND_DATA c_file;
+
+		CString fileFormat;
+		fileFormat.Format(_T(".\\resources\\*.mss"));
+
+		HANDLE hFile = FindFirstFile(fileFormat, &c_file);
+		CString foundFileName;
+		rt.push_back(string("*.mss Files at " + TCHARToString(currentPath) + "\\resources\\"));
+		if (hFile != INVALID_HANDLE_VALUE) {
+			do {
+				foundFileName.Format(_T("%s"), c_file.cFileName);
+				rt.push_back(string(CT2CA(foundFileName)));
+			} while (FindNextFile(hFile, &c_file));
+		}
+		FindClose(hFile);
+
+		return rt;
 	}
 };
 

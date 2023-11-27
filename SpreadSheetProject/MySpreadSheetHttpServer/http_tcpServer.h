@@ -67,7 +67,7 @@ namespace http {
 		void closeServer();
 		void acceptConnection(SOCKET& new_socket);
 		string buildResponse();
-		string buildResponse(string content);
+		void buildResponse(pair<int, string> codeAndContent);
 		void sendResponse();
 
 		// HTTP
@@ -78,7 +78,7 @@ namespace http {
 		void http_handler(SOCKET asock);
 
 		// Controller
-
+		Controller* controller;
 	};
 }
 

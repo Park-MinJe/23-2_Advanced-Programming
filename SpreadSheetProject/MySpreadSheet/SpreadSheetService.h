@@ -42,9 +42,15 @@ namespace {
 		SpreadSheetService();
 		~SpreadSheetService();
 
-
-
+		/*
+		* CREATE
+		*/
 		void CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn = "NewFile");
+
+		/*
+		* SHOW DATA OR LIST
+		*/
+		map<string, string> GetWorkBookList();
 		void ShowWorkBookInfoService(string pFn);
 	};
 
@@ -64,6 +70,14 @@ namespace {
 
 	void SpreadSheetService::CreatWorkBookByExistingTablesService(map<string, vector<vector<string>>> pTabs, string pFn) {
 		prog->createWorkBookByExistingTables(pTabs, pFn);
+	}
+
+	/*
+	* SHOW DATA OR LIST
+	* <id, file name>
+	*/
+	map<string, string> SpreadSheetService::GetWorkBookList() {
+		return prog->getWorkBookListByMap();
 	}
 
 	void SpreadSheetService::ShowWorkBookInfoService(string pFn) {

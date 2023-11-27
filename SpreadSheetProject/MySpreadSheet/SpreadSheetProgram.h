@@ -95,6 +95,15 @@ public:
 			iter->second->showWorkbookInfo();
 		}
 	}
+
+	map<string, string> getWorkBookListByMap(){
+		map<string, string> rt;
+		int i;
+		for (i = 0, iter = files.begin(); iter != files.end(); ++i, iter++) {
+			rt.insert(make_pair(to_string(i), iter->second->getFileName()));
+		}
+		return rt;
+	}
 };
 
 #endif

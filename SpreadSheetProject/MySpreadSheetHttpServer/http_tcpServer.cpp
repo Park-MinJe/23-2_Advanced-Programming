@@ -77,10 +77,14 @@ namespace http {
 			ss << "Failed to start server with PORT: " << ntohs(m_socketAddress.sin_port);
 			log(ss.str());
 		}
+
+		controller = new Controller();
 	}
 
 	TcpServer::~TcpServer() {
 		closeServer();
+
+		delete controller;
 	}
 
 	int TcpServer::startServer() {
@@ -167,12 +171,16 @@ namespace http {
 		return ss.str();
 	}
 
-	string TcpServer::buildResponse(string content) {
-		string htmlFile = "<!DOCTYPE html><html lang=\"en\">" + content + "</body></html>";
+	void TcpServer::buildResponse(pair<int, string> codeAndContent) {
+		string htmlFile = "<!DOCTYPE html><html lang=\"en\">" + codeAndContent.second + "</body></html>";
 		ostringstream ss;
-		ss << "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: " << htmlFile.size() << "\n\n" << htmlFile;
 
-		return ss.str();
+		if (codeAndContent.first == 200)
+			ss << "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: " << htmlFile.size() << "\n\n" << htmlFile;
+		else if (codeAndContent.first == 404)
+			ss << "HTTP/1.1 400 Invalid path\nContent-Type: text/html\nContent-Length: " << htmlFile.size() << "\n\n" << htmlFile;
+
+		m_serverMessage = ss.str();
 	}
 
 	void TcpServer::sendResponse() {
@@ -328,11 +336,12 @@ namespace http {
 		/* Path varifier
 		 * Varify requested PATH
 		 */
-		vector<string> path;
+		/*vector<string> path;
 		for (nextToken = strtok(uri, "/\\"); nextToken != NULL; nextToken = strtok(NULL, "/\\")) {
 			log(string(nextToken));
 			path.push_back(string(nextToken));
-		}
+		}*/
+		this->buildResponse(controller->pathVerifier(string(method), controller->getPathTokens(uri)));
 
 		/*char safe_uri[BUFFER_SIZE];
 		char* local_uri;

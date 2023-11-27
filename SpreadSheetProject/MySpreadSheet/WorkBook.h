@@ -81,7 +81,7 @@ public:
 	void setFileName(string fn) {
 		fileName = fn;
 	}
-	string getFileName() {
+	string& getFileName() {
 		return fileName;
 	}
 
