@@ -21,6 +21,12 @@
 #include <string>
 #endif
 
+//#ifndef __INCLUDE_LOGGER__
+//#define __INCLUDE_LOGGER__
+//#include "../MyLogger/Logger.h"
+//#include "../MyLogger/Logger.cpp"
+//#endif
+
 #ifndef __USING_STD__
 #define __USING_STD__
 using namespace std;
@@ -48,6 +54,8 @@ namespace http {
 		void startListen();
 	
 	private:
+		//Logger* _log;
+
 		string m_ip_address;
 		int m_port;
 		SOCKET m_socket;

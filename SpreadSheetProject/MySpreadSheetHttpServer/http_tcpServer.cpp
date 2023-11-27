@@ -70,6 +70,8 @@ namespace http {
 		m_serverMessage(buildResponse()), m_wsaData()
 		//m_serverMessage(), m_wsaData()
 	{
+		//_log = new Logger("TcpServer");
+		//_log->debug("TcpServer is allocated");
 		
 		m_socketAddress.sin_family = AF_INET;
 		m_socketAddress.sin_port = htons(m_port);
@@ -256,8 +258,11 @@ namespace http {
 			handle_500(asock); return;
 		}
 		
-		printf("[INFO] Handling Request: method=%s, URI=%s\n", method, uri);
+		log("[INFO] Handling Request: method=" + string(method) + ", URI = " + string(uri) + "\n");
 
+		/* Get body content.
+		 * Usually SQL statement
+		 */
 		char* nextToken;
 		char boundary[BUFFER_SIZE];
 		char boundaryEnd[BUFFER_SIZE];
@@ -315,6 +320,16 @@ namespace http {
 					}
 				}
 			}
+		}
+
+		/* Path varifier
+		 * Varify requested PATH
+		 */
+		vector<string> path;
+		int path_idx = 0;
+		for (nextToken = strtok(uri, "/\\"); nextToken != NULL; nextToken = strtok(NULL, "/\\")) {
+			log(string(nextToken));
+			path.push_back(string(nextToken));
 		}
 
 		/*for (string q : query) {

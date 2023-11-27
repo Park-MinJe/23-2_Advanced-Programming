@@ -10,7 +10,7 @@
 
 int main() {
 	// Spread Sheet integration test
-	//_ProjectDepencencyTest();
+	_ProjectDepencencyTest();
 	
 	// Connection test
 	_TcpServerIntegrationTest();
