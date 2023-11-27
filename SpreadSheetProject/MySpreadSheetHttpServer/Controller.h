@@ -47,31 +47,56 @@ namespace http {
 			delete frService;
 		}
 
-		vector<string> getPathTokens(char*& uri) {
+		pair<vector<string>, vector<string>> getPathTokens(char*& uri) {
+			char* path = strtok(uri, "?");
+			char* params = strtok(NULL, "?");
+
 			char* nextToken;
-			vector<string> path;
-			for (nextToken = strtok(uri, "/\\"); nextToken != NULL; nextToken = strtok(NULL, "/\\")) {
-				cout << (string(nextToken));
-				path.push_back(string(nextToken));
+			vector<string> path_list;
+			for (nextToken = strtok(path, "/\\"); nextToken != NULL; nextToken = strtok(NULL, "/\\")) {
+				//cout << (string(nextToken));
+				path_list.push_back(string(nextToken));
 			}
 
-			return path;
+			vector<string> param_list;
+			for (nextToken = strtok(params, "=&"); nextToken != NULL; nextToken = strtok(NULL, "=&")) {
+				if (strcmp(nextToken, "file") == 0) {
+					nextToken = strtok(NULL, "=&");
+					cout << string(nextToken) << "\n";
+					param_list.push_back(string(nextToken));
+				}
+				else {
+					nextToken = strtok(NULL, "=&");
+				}
+			}
+
+			return make_pair(path_list, param_list);
 		}
 
-		pair<int, string> pathVerifier(string method, vector<string> pathTokens) {
+		pair<int, string> pathVerifier(string method, pair<vector<string>, vector<string>> pathAndParamTokens) {
+			vector<string> pathTokens = pathAndParamTokens.first;
+			vector<string> paramTokens = pathAndParamTokens.second;
+
 			if (method.compare("GET") == 0) {
 				if (pathTokens[0].compare("mssFiles") == 0) {
-					return make_pair(200, ShowMssFiles());
+					return ShowMssFiles();
 				}
+				
 				if (pathTokens[0].compare("workbooks") == 0) {
-					return make_pair(200, getWorkbookList());
+					return getWorkbookList();
+				}
+			}
+			else if (method.compare("POST") == 0) {
+				if (pathTokens[0].compare("workbook") == 0) {
+					if (pathTokens.size() >= 2 && pathTokens[1].compare("generate") == 0)
+						return makeWorkbookWithExistingMssFiles(paramTokens);
 				}
 			}
 			return make_pair(400, "<h1>404 Not Found</h1>\n");
 		}
 
 		/* GET /mssFiles */
-		string ShowMssFiles() {
+		pair<int, string> ShowMssFiles() {
 			vector<string> dirAndFileNames = frService->GetMssFilesService();
 			string rt = "<p> " + dirAndFileNames[0] + " </p>";
 
@@ -84,11 +109,11 @@ namespace http {
 			}
 			rt += "</table>";
 
-			return rt;
+			return make_pair(200, rt);
 		}
 
 		/* GET /workbooks */
-		string getWorkbookList() {
+		pair<int, string> getWorkbookList() {
 			map<string, string> workbookList = spreadSheetService->GetWorkBookList();
 			string rt = "<table>";
 
@@ -100,7 +125,28 @@ namespace http {
 			}
 			rt += "</table>";
 
-			return rt;
+			return make_pair(200, rt);
+		}
+
+		/* GET /workbook */
+
+		/* POST /workbook/generate?file={fileName} */
+		pair<int, string> makeWorkbookWithExistingMssFiles(vector<string> paramTokens) {
+			map<string, vector<vector<string>>> tabs = frService->GetTabsByFileNameFromRootResourceDirService(paramTokens);
+			spreadSheetService->CreatWorkBookByExistingTablesService(tabs, "CreatedFileByExistingTabs");
+			pair<string, vector<string>> workbookListInfo = spreadSheetService->GetWorkBookListService("CreatedFileByExistingTabs");
+
+			string rt = "<p> " + workbookListInfo.first + " </p>";
+			rt += "<table>";
+
+			vector<string>::iterator workbookListIter;
+			for (workbookListIter = workbookListInfo.second.begin(); workbookListIter != workbookListInfo.second.end(); workbookListIter++) {
+				rt += "<tr><td>" + *workbookListIter + "</td></tr>";
+			}
+
+			rt += "</table>";
+			
+			return make_pair(200, rt);
 		}
 	};
 }

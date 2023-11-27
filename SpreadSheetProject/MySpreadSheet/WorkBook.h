@@ -141,6 +141,17 @@ public:
 		return rt;
 	}
 
+	pair<string, vector<string>> getWorkbookInfo() {
+		vector<string> rt;
+		int i = 0;
+		_log->debug(to_string(pages.size()));
+		for (iter = pages.begin(); iter != pages.end(); iter++) {
+			rt.push_back(iter->second->toString());
+			++i;
+		}
+		return make_pair(this->toString(), rt);
+	}
+
 	void showWorkbookInfo() {
 		vector<string> rt;
 		int i = 0;

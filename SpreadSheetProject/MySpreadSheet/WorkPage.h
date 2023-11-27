@@ -131,6 +131,9 @@ public:
 		return string("WORKPAGE-" + pageName + "@") + ss.str();
 	}
 
+	pair<string, vector<vector<string>>> getPageInfo() {
+		return getTable(this->toString(), cells);
+	}
 	void showPage() {
 		printTable(this->toString(), cells);
 	}

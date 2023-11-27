@@ -172,7 +172,7 @@ namespace http {
 	}
 
 	void TcpServer::buildResponse(pair<int, string> codeAndContent) {
-		string htmlFile = "<!DOCTYPE html><html lang=\"en\">" + codeAndContent.second + "</body></html>";
+		string htmlFile = "<!DOCTYPE html><html lang=\"en\"><body>" + codeAndContent.second + "</body></html>";
 		ostringstream ss;
 
 		if (codeAndContent.first == 200)
@@ -262,8 +262,8 @@ namespace http {
 		}
 		log(buf);
 
-		char* method = strtok(buf, " \n=:,");
-		char* uri = strtok(NULL, " \n=:,");
+		char* method = strtok(buf, " \n:,");
+		char* uri = strtok(NULL, " \n:,");
 		if (method == NULL || uri == NULL) {
 			perror("[ERR] Failed to identify method, URI.\n");
 			handle_500(asock); return;
