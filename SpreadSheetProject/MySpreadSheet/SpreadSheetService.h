@@ -52,7 +52,7 @@ namespace {
 		*/
 		map<string, string> GetWorkBookList();
 		pair<string, vector<string>> GetWorkBookListService(string pFn);
-		map<string, vector<vector<string>>> GetWorkBookInfoService(string pFn);
+		pair<string, vector<vector<string>>> GetWorPageDataService(string pWorkBookName, string pWorkPageName);
 
 		/*
 		* SHOW DATA OR LIST AT CONSOLE
@@ -102,6 +102,17 @@ namespace {
 		for (int i = 0; i < wb->getPageCnt(); ++i) {
 			wb->getWorkPageByIdx(i)->showPage();
 		}
+	}
+
+	/*
+	* get work page table data
+	* <page name, table>
+	*/
+	pair<string, vector<vector<string>>> SpreadSheetService::GetWorPageDataService(string pWorkBookName, string pWorkPageName) {
+		vector<vector<string>> rt;
+
+		WorkBook*& wb = prog->getWorkBookByFileName(pWorkBookName);
+		return wb->getWorkPageByName(pWorkPageName)->getPageInfo();
 	}
 }
 

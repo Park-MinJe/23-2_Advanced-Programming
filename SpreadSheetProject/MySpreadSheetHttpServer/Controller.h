@@ -42,9 +42,9 @@ namespace http {
 		}
 		~Controller() {
 			//_log->debug("Controller is deallocated");
-			//delete _log;
-			delete spreadSheetService;
-			delete frService;
+//delete _log;
+delete spreadSheetService;
+delete frService;
 		}
 
 		pair<vector<string>, vector<string>> getPathTokens(char*& uri) {
@@ -78,18 +78,41 @@ namespace http {
 			vector<string> paramTokens = pathAndParamTokens.second;
 
 			if (method.compare("GET") == 0) {
+				/* GET /mssFiles */
 				if (pathTokens[0].compare("mssFiles") == 0) {
 					return ShowMssFiles();
 				}
-				
-				if (pathTokens[0].compare("workbooks") == 0) {
-					return getWorkbookList();
+
+				/* GET /workbooks */
+				else if (pathTokens[0].compare("workbooks") == 0) {
+					if (pathTokens.size() == 1) {
+						return getWorkbookList();
+					}
+					/* GET /workbooks/{workbookname} */
+					else if (pathTokens.size() == 2) {
+
+					}
+					/* GET /workbooks/{workbookname}/{workpagename} */
+					else if (pathTokens.size() == 3) {
+						cout << "debug\n";
+						return getWorkPageData(pathTokens[1], pathTokens[2]);
+					}
+					else {
+						return make_pair(400, "<h1>404 Not Found</h1>\n");
+					}
+				}
+				else {
+					return make_pair(400, "<h1>404 Not Found</h1>\n");
 				}
 			}
 			else if (method.compare("POST") == 0) {
 				if (pathTokens[0].compare("workbook") == 0) {
+					/* POST /workbook/generate?file={fileName} */
 					if (pathTokens.size() >= 2 && pathTokens[1].compare("generate") == 0)
 						return makeWorkbookWithExistingMssFiles(paramTokens);
+				}
+				else {
+					return make_pair(400, "<h1>404 Not Found</h1>\n");
 				}
 			}
 			return make_pair(400, "<h1>404 Not Found</h1>\n");
@@ -101,11 +124,11 @@ namespace http {
 			string rt = "<p> " + dirAndFileNames[0] + " </p>";
 
 			rt += "<table><tr><th scope=\"col\">ID</td><th scope=\"col\">File Name</td></tr>";
-			
+
 			vector<string>::iterator filesIter;
 			int i = 0;
 			for (i = 0, filesIter = dirAndFileNames.begin() + 1; filesIter != dirAndFileNames.end(); ++i, filesIter++) {
-				rt += "<tr><td>" + to_string(i+1) + "</td><td>" + *filesIter + "</td></tr>";
+				rt += "<tr><td>" + to_string(i + 1) + "</td><td>" + *filesIter + "</td></tr>";
 			}
 			rt += "</table>";
 
@@ -118,7 +141,7 @@ namespace http {
 			string rt = "<table>";
 
 			rt += "<tr><th scope=\"col\">ID</td><th scope=\"col\">File Name</td></tr>";
-			
+
 			map<string, string>::iterator workbookListIter;
 			for (workbookListIter = workbookList.begin(); workbookListIter != workbookList.end(); workbookListIter++) {
 				rt += "<tr><td>" + workbookListIter->first + "</td><td>" + workbookListIter->second + "</td></tr>";
@@ -128,7 +151,32 @@ namespace http {
 			return make_pair(200, rt);
 		}
 
-		/* GET /workbook */
+		/* GET /workbooks/{workbookname}/{workpagename} */
+		pair<int, string> getWorkPageData(string pWorkBookName, string pWorkPageName) {
+			pair<string, vector<vector<string>>> workpage = spreadSheetService->GetWorPageDataService(pWorkBookName, pWorkPageName);
+			
+			string rt = "<form action = \"http://localhost:8080/workbooks/" + pWorkBookName + "/" + pWorkPageName + "/edit\" accept-charset=\"utf-8\" name = \"update\" method = \"post\">";
+			rt += "<p>" + workpage.first + "</p>";
+
+			rt += "<table>";
+
+			int row = 0, col = 0;
+			vector<vector<string>>::iterator rowIter;
+			vector<string>::iterator colIter;
+			for (rowIter = workpage.second.begin(); rowIter != workpage.second.end(); rowIter++) {
+				rt += "<tr>";
+				for (colIter = (*rowIter).begin(); colIter != (*rowIter).end(); colIter++) {
+					rt += "<td><input type=\"text\" name=\"" + to_string(row) + "-" + to_string(col) + "\" placeholder=\"" + *colIter + "\"/></td>";
+					col++;
+				}
+				rt += "</tr>";
+				row++;
+			}
+
+			rt += "</table><input type=\"submit\" value=\"submit\"< / form>";
+
+			return make_pair(200, rt);
+		}
 
 		/* POST /workbook/generate?file={fileName} */
 		pair<int, string> makeWorkbookWithExistingMssFiles(vector<string> paramTokens) {

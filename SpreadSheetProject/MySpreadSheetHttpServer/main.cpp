@@ -15,5 +15,7 @@ int main() {
 	// Connection test
 	_TcpServerIntegrationTest();
 
+	system("pause");
+
 	return 0;
 }
