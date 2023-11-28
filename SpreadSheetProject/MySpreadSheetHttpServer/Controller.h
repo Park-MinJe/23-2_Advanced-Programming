@@ -42,9 +42,9 @@ namespace http {
 		}
 		~Controller() {
 			//_log->debug("Controller is deallocated");
-//delete _log;
-delete spreadSheetService;
-delete frService;
+			//delete _log;
+			delete spreadSheetService;
+			delete frService;
 		}
 
 		pair<vector<string>, vector<string>> getPathTokens(char*& uri) {
